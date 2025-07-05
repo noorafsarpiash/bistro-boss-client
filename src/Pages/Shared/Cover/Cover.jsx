@@ -30,4 +30,4 @@ const Cover = ({ img, title }) => {
     )
 }
 
-export default Cover
+export default Cover;
