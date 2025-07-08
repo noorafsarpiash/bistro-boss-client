@@ -2,17 +2,21 @@ import { useContext } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form"
 import { AuthContext } from "../../providers/AuthProvider";
+import { Link, useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 
 const SignUp = () => {
+    const navigate = useNavigate();
     const {
         register,
         handleSubmit,
+        reset,
 
         formState: { errors },
     } = useForm();
 
-    const { createUser } = useContext(AuthContext);
+    const { createUser, updateUserProfile } = useContext(AuthContext);
 
     const onSubmit = (data) => {
         console.log(data);
@@ -20,10 +24,24 @@ const SignUp = () => {
             .then(result => {
                 const user = result.user;
                 console.log(user);
-            })
-            .catch(error => {
+                updateUserProfile(data.name, data.photoURL)
+                    .then(() => {
+                        console.log("user profile info updated")
+                        reset();
+                        Swal.fire({
+                            position: "top-end",
+                            icon: "success",
+                            title: "User Created Successfully",
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        navigate("/");
+
+                    })
+            }).catch(error => {
                 console.error(error);
             });
+
     };
 
 
@@ -58,6 +76,11 @@ const SignUp = () => {
                                 {errors.name && <span className="text-red-600">Name is required</span>}
 
 
+                                <label className="label">Photo URL</label>
+                                <input type="text"  {...register("photoURL", { required: true })} name='photoURL' className="input" placeholder="Photo URL" />
+                                {errors.photoURL && <span className="text-red-600">Photo URL is required</span>}
+
+
                                 <label className="label">Email</label>
                                 <input type="email"  {...register("email", { required: true })} name='email' className="input" placeholder="Email" />
                                 {errors.email && <span className="text-red-600">Email is required</span>}
@@ -81,6 +104,7 @@ const SignUp = () => {
 
                             </fieldset>
                         </form>
+                        <p><small>Already have an account? <Link to="/login">Login</Link></small></p>
                     </div>
                 </div>
             </div>
