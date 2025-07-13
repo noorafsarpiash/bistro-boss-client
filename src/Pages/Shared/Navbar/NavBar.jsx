@@ -22,7 +22,7 @@ const NavBar = () => {
         <li><Link to="/secret">Secret</Link></li>
 
 
-        <li><Link to="/">
+        <li><Link to="/dashboard/cart">
 
             <button className="btn">
                 <BsFillCartFill className='mr-2'></BsFillCartFill> <div className="badge badge-sm badge-secondary">+{cart.length}</div>
