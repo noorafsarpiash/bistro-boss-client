@@ -2,7 +2,9 @@ import { FaAd, FaCalendar, FaHome, FaList, FaSearch } from "react-icons/fa";
 
 import { NavLink, Outlet } from 'react-router'
 import { BsFillCartFill } from 'react-icons/bs';
+import useCart from "../Hooks/useCart";
 const Dashboard = () => {
+    const [cart] = useCart();
 
     const navLinkClass = ({ isActive }) =>
         isActive
@@ -28,7 +30,7 @@ const Dashboard = () => {
                     <li>
                         <NavLink to="/dashboard/cart" className={navLinkClass}>
                             <BsFillCartFill />
-                            My Cart
+                            My Cart ({cart.length})
                         </NavLink>
                     </li>
                     <li>
