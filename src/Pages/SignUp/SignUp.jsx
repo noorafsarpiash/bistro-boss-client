@@ -5,6 +5,7 @@ import { AuthContext } from "../../providers/AuthProvider";
 import { Link, useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../Hooks/useAxiosPublic";
+import SocialLogin from "../../components/SocialLogin/SocialLogin";
 
 
 const SignUp = () => {
@@ -119,7 +120,8 @@ const SignUp = () => {
 
                             </fieldset>
                         </form>
-                        <p><small>Already have an account? <Link to="/login">Login</Link></small></p>
+                        <p className="px-4"><small>Already have an account? <Link to="/login">Login</Link></small></p>
+                        <SocialLogin />
                     </div>
                 </div>
             </div>

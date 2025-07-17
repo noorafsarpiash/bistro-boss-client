@@ -1,10 +1,12 @@
-import { FaAd, FaCalendar, FaHome, FaList, FaSearch } from "react-icons/fa";
+import { FaAd, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaVoicemail } from "react-icons/fa";
 
 import { NavLink, Outlet } from 'react-router'
 import { BsFillCartFill } from 'react-icons/bs';
 import useCart from "../Hooks/useCart";
 const Dashboard = () => {
     const [cart] = useCart();
+
+    const isAdmin = true;
 
     const navLinkClass = ({ isActive }) =>
         isActive
@@ -56,6 +58,12 @@ const Dashboard = () => {
                         <NavLink to="/order/salasd" >
                             <FaSearch />
                             Home
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/order/salasd" >
+                            <FaEnvelope />
+                            Contact
                         </NavLink>
                     </li>
                 </ul>
