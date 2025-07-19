@@ -1,4 +1,4 @@
-import { FaAd, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaVoicemail } from "react-icons/fa";
+import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaUser, FaUtensils, FaVoicemail } from "react-icons/fa";
 
 import { NavLink, Outlet } from 'react-router'
 import { BsFillCartFill } from 'react-icons/bs';
@@ -17,36 +17,75 @@ const Dashboard = () => {
         <div className='flex'>
             <div className='w-64 min-h-screen bg-orange-400'>
                 <ul className="menu p-4 space-y-2">
-                    <li>
-                        <NavLink to="/dashboard/userHome" className={navLinkClass}>
-                            <FaHome />
-                            User Home
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/dashboard/reservation" className={navLinkClass}>
-                            <FaCalendar />
-                            Reservation
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/dashboard/cart" className={navLinkClass}>
-                            <BsFillCartFill />
-                            My Cart ({cart.length})
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/dashboard/review" className={navLinkClass}>
-                            <FaAd />
-                            Add a Review
-                        </NavLink>
-                    </li>
-                    <li>
-                        <NavLink to="/dashboard/bookings" className={navLinkClass}>
-                            <FaList />
-                            My Bookings
-                        </NavLink>
-                    </li>
+
+
+                    {
+                        isAdmin ? <>
+                            <li>
+                                <NavLink to="/dashboard/adminHome" className={navLinkClass}>
+                                    <FaHome />
+                                    Admin  Home
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/addItems" className={navLinkClass}>
+                                    <FaUtensils />
+                                    Add Items
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/manageItems" className={navLinkClass}>
+                                    <FaList />
+                                    Manage Items
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/bookings" className={navLinkClass}>
+                                    <FaAd />
+                                    Manage Bookings
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/dashboard/users" className={navLinkClass}>
+                                    <FaUser />
+                                    All Users
+                                </NavLink>
+                            </li>
+                        </> :
+                            <>
+                                <li>
+                                    <NavLink to="/dashboard/userHome" className={navLinkClass}>
+                                        <FaHome />
+                                        User Home
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/reservation" className={navLinkClass}>
+                                        <FaCalendar />
+                                        Reservation
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/cart" className={navLinkClass}>
+                                        <BsFillCartFill />
+                                        My Cart ({cart.length})
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/review" className={navLinkClass}>
+                                        <FaAd />
+                                        Add a Review
+                                    </NavLink>
+                                </li>
+                                <li>
+                                    <NavLink to="/dashboard/bookings" className={navLinkClass}>
+                                        <FaList />
+                                        My Bookings
+                                    </NavLink>
+                                </li>
+                            </>
+                    }
+
                     <div className="divider"></div>
                     <li>
                         <NavLink to="/" >
