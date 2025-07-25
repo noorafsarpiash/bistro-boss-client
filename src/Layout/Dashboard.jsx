@@ -3,10 +3,11 @@ import { FaAd, FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaSearch, FaUser,
 import { NavLink, Outlet } from 'react-router'
 import { BsFillCartFill } from 'react-icons/bs';
 import useCart from "../Hooks/useCart";
+import useAdmin from "../Hooks/useAdmin";
 const Dashboard = () => {
     const [cart] = useCart();
 
-    const isAdmin = true;
+    const [isAdmin] = useAdmin();
 
     const navLinkClass = ({ isActive }) =>
         isActive
