@@ -2,6 +2,7 @@ import Swal from "sweetalert2";
 import useCart from "../../../Hooks/useCart";
 import { MdDelete } from "react-icons/md";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { Link } from "react-router";
 
 const Cart = () => {
     const [cart, refetch, isLoading, error] = useCart();
@@ -48,7 +49,11 @@ const Cart = () => {
                 <h2 className="text-2xl md:text-4xl mb-2 md:mb-0">
                     💰 Total Price: ${totalPrice.toFixed(2)}
                 </h2>
-                <button className="btn btn-primary px-6 py-3 text-lg">Pay</button>
+                {cart.length ? <Link to="/dashboard/payment">
+                    <button disabled={!cart.length} className="btn btn-primary px-6 py-3 text-lg">Pay</button>
+                </Link> :
+                    <button disabled className="btn btn-primary px-6 py-3 text-lg">Pay</button>
+                }
             </div>
 
             {cart.length === 0 ? (
