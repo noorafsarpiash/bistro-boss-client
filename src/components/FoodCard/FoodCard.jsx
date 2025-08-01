@@ -34,7 +34,7 @@ const FoodCard = ({ item }) => {
                         Swal.fire({
                             position: "top-end",
                             icon: "success",
-                            title: `${name} added to your cart successfully`,
+                            title: `${food.name} added to your cart successfully`,
                             showConfirmButton: false,
                             timer: 1500
                         });
@@ -73,7 +73,9 @@ const FoodCard = ({ item }) => {
                 <h2 className="card-title">{name}</h2>
                 <p>{recipe}</p>
                 <div className="card-actions justify-end">
-                    <button onClick={handleAddToCart} className="btn btn-outline border-0 border-b-4 mt-4">Add to Cart</button>
+                    <button onClick={() => handleAddToCart(item)} className="btn btn-outline border-0 border-b-4 mt-4">
+                        Add to Cart
+                    </button>
                 </div>
             </div>
         </div>

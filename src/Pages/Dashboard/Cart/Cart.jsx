@@ -7,7 +7,7 @@ import { Link } from "react-router";
 const Cart = () => {
     const [cart, refetch, isLoading, error] = useCart();
     const axiosSecure = useAxiosSecure();
-
+    console.log(cart)
     // Loader
     if (isLoading) return <p className="text-center text-lg">Loading cart items...</p>;
     if (error) return <p className="text-center text-red-500">Failed to load cart.</p>;
@@ -78,14 +78,14 @@ const Cart = () => {
                                         <div className="avatar">
                                             <div className="mask mask-squircle w-12 h-12">
                                                 <img
-                                                    src={item.image || "https://via.placeholder.com/100"}
+                                                    src={item.image}
                                                     alt="Item"
                                                 />
                                             </div>
                                         </div>
                                     </td>
-                                    <td>{item.name || "No name"}</td>
-                                    <td>${item.price || "0.00"}</td>
+                                    <td>{item.name}</td>
+                                    <td>${item.price}</td>
                                     <td>
                                         <button
                                             onClick={() => handleDelete(item._id)}
