@@ -4,19 +4,75 @@ import { FaAddressBook } from "react-icons/fa";
 import useAuth from '../../../Hooks/useAuth'
 import useAxiosSecure from '../../../Hooks/useAxiosSecure'
 import { useQuery } from '@tanstack/react-query'
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Pie, PieChart, Legend } from 'recharts';
 
+const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'red', 'pink'];
 const AdminHome = () => {
 
     const { user } = useAuth()
     const axiosSecure = useAxiosSecure()
 
-    const { data: stats } = useQuery({
+    const { data: stats = {} } = useQuery({
         queryKey: ["admin-stats"],
         queryFn: async () => {
             const res = await axiosSecure.get("/admin-stats");
             return res.data;
         }
     });
+
+    const { data: chartData = [] } = useQuery({
+        queryKey: ["order-stats"],
+        queryFn: async () => {
+            const res = await axiosSecure.get("/order-stats");
+            return res.data;
+        }
+
+    });
+
+
+    const getPath = (x, y, width, height) => {
+        return `M${x},${y + height}C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3}
+  ${x + width / 2}, ${y}
+  C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${x + width}, ${y + height}
+  Z`;
+    };
+
+    const TriangleBar = (props) => {
+        const { fill, x, y, width, height } = props;
+
+        return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+    };
+
+
+
+    const RADIAN = Math.PI / 180;
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+        const x = cx + radius * Math.cos(-(midAngle ? midAngle : 0) * RADIAN);
+        const y = cy + radius * Math.sin(-(midAngle ? midAngle : 0) * RADIAN);
+
+        return (
+            <text
+                x={x}
+                y={y}
+                fill="white"
+                textAnchor={x > cx ? 'start' : 'end'}
+                dominantBaseline="central"
+            >
+                {`${((percent || 1) * 100).toFixed(0)}%`}
+            </text>
+        );
+    };
+
+
+    const pieChartData = chartData.map(data => {
+        return { name: data.category, value: data.revenue }
+    })
+
+
+
 
     return (
         <div>
@@ -77,102 +133,54 @@ const AdminHome = () => {
                 </div>
 
 
-
-                import {FaDollarSign, FaUser, FaAddressBook} from "react-icons/fa";
-
-                export default function DashboardStats({user, stats}) {
-  const statItems = [
-                {
-                    icon: <FaDollarSign className="text-3xl text-secondary" />,
-                title: "Revenue",
-                value: `$${stats?.revenue}`,
-                desc: "Jan 1st - Feb 1st",
-    },
-                {
-                    icon: <FaUser className="text-3xl text-secondary" />,
-                title: "Users",
-                value: stats?.users,
-                desc: "↗︎ 400 (22%)",
-    },
-                {
-                    icon: <FaAddressBook className="text-3xl text-secondary" />,
-                title: "Menu Items",
-                value: stats?.menuItems,
-                desc: "↘︎ 90 (14%)",
-    },
-                {
-                    icon: (
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="h-8 w-8 stroke-current text-secondary"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                    ></path>
-                </svg>
-                ),
-                title: "Orders",
-                value: stats?.orders,
-                desc: "↘︎ 90 (14%)",
-    },
-                ];
-
-                return (
-                <div>
-                    <div className="text-3xl font-semibold mb-6">
-                        <span>Hi, Welcome </span>
-                        <span className="text-2xl text-blue-500">
-                            {user?.displayName || "Admin"}
-                        </span>
-                    </div>
-
-                    <div className="stats shadow flex flex-wrap gap-4">
-                        {statItems.map((item, idx) => (
-                            <div key={idx} className="stat">
-                                <div className="stat-figure">{item.icon}</div>
-                                <div className="stat-title">{item.title}</div>
-                                <div className="stat-value">{item.value}</div>
-                                <div className="stat-desc">{item.desc}</div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-                );
-}
-
-
-
-
-
-
-
-
-
-
-
-
             </div>
+            <div className="flex">
+                <div className="w-1/2">
 
+                    <BarChart
+                        width={500}
+                        height={300}
+                        data={chartData}
+                        margin={{
+                            top: 20,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="category" />
+                        <YAxis />
+                        <Bar dataKey="quantity" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top' }}>
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={colors[index % 6]} />
+                            ))}
+                        </Bar>
+                    </BarChart>
 
+                </div>
+                <div className="w-1/2">
 
+                    <PieChart width={400} height={400}>
+                        <Pie
+                            data={pieChartData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={renderCustomizedLabel}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                        >
+                            {pieChartData.map((entry, index) => (
+                                <Cell key={`cell-${entry.name}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Legend />
+                    </PieChart>
 
-
-
-
-
-
-
-
-
-
-
-
-
+                </div>
+            </div>
         </div>
     )
 }
